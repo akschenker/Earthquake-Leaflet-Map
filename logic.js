@@ -17,6 +17,7 @@ function createFeatures(data) {
         accessToken: API_KEY
       }).addTo(myMap);
 
+    //   make markers
     data.forEach(feature => {
         var mag = feature.properties.mag;
 
@@ -48,4 +49,21 @@ function createFeatures(data) {
                     radius: mag * 10000
                  }).bindPopup("<h3> Location: " + feature.properties.place + "<hr>Mag: " + mag + "</h3>").addTo(myMap);
     });
+    
+    // make legend
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function() {
+        var div = L.DomUtil.create('div', 'info legend');
+        var labels = ["0-1", "1-2", "2-3", "3-4", "4-5", "5+"];
+        var colors = ["green", "yellow", "#E59866",
+                        "orange", "#D35400", "red"];
+    
+        // loop through our density intervals and generate a label with a colored background for each interval
+        for (var i = 0; i < colors.length; i++) {
+            div.innerHTML +=
+                '<li style="background-color:' + colors[i] + '">' + labels[i] + '</li>';
+            }
+        return div;
+    }
+    legend.addTo(myMap);
 }
